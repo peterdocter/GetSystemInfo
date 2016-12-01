@@ -5,11 +5,13 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvIP;
+    private LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +19,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(getString(R.string.activity_system_info));
 
-        tvIP = (TextView) findViewById(R.id.tv_ip);
-
+        layout = (LinearLayout) findViewById(R.id.layout_infos);
         getIP();
-
+        getDisplayMetrics();
     }
 
     /**
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipAddress = wifiInfo.getIpAddress();
         String ip = intToIp(ipAddress);
-        tvIP.setText("IP地址：" + ip);
+        TextView textView = new TextView(this);
+        textView.setText("IP地址：" + ip);
+        layout.addView(textView);
     }
 
 
@@ -45,5 +48,41 @@ public class MainActivity extends AppCompatActivity {
                 ((i >> 8) & 0xFF) + "." +
                 ((i >> 16) & 0xFF) + "." +
                 (i >> 24 & 0xFF);
+    }
+
+
+    private void getDisplayMetrics() {
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        float density = dm.density;
+        int densityDpi = dm.densityDpi;
+        int widthPixels = dm.widthPixels;
+        int heightPixels = dm.heightPixels;
+        float xdpi = dm.xdpi;
+        float ydpi = dm.ydpi;
+
+        TextView tvDensity = new TextView(this);
+        TextView tvDensityDpi = new TextView(this);
+        TextView tvWidth = new TextView(this);
+        TextView tvheight = new TextView(this);
+        TextView tvXdpi = new TextView(this);
+        TextView tvYdpi = new TextView(this);
+
+        tvDensity.setText("density：" + density);
+        tvDensityDpi.setText("densityDpi：" + densityDpi);
+        tvWidth.setText("widthPixels : " + widthPixels);
+        tvheight.setText("heightPixels : " + heightPixels);
+        tvXdpi.setText("xdpi : " + xdpi);
+        tvYdpi.setText("ydpi : " + ydpi);
+
+        layout.addView(tvDensity);
+        layout.addView(tvDensityDpi);
+        layout.addView(tvWidth);
+        layout.addView(tvheight);
+        layout.addView(tvXdpi);
+        layout.addView(tvYdpi);
+
+
     }
 }
